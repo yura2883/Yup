@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<title>yp-table</title>
+	<script type="module" src="yp-table-test.min.js"></script>
+</head>
+<body>
+	Test yp-table, press F12 (console) to see errors
+
+	<script type="text/javascript">
+
+	window.onload = function() {
+		// constructor
+		var d=new ypLib.table({"f":['id','fio'], "d":[
+			[1,'Иванов'],
+			[2,'Петров'],
+			[3,'Сидоров'],
+			[4,'Ежидзе']
+		], "m":null}), v
+
+		// count
+		if((v=d.count()) != 4) console.log('Rowdata count: ' + v + ', expected: 4')
+
+		// getRow
+		if((v=d.getRow(1).fio) != 'Петров') console.log('getRow(1).fio: ' + v + ', expected Петров')
+
+		// each
+		v = null
+		d.each(function(row, ri) {
+			if(ri == 1) {v = row.fio; return false}
+			// сюда не должны дойти (т.к. во 2-й строке return false)
+			if(ri == 2) v = null
+		})
+		if(v != 'Петров') console.log('each((r, ri=1)=>r.fio: ' + v + ', expected Петров')
+
+		// transpose
+		if((v=d.transpose().id.data[1]) != 2) console.log('transpose().id.data[1]: ' + v + ', expected 2')
+	}
+	
+	</script>
+
+</body>
+</html>
